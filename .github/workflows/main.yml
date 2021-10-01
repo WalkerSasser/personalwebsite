@@ -1,52 +1,44 @@
-# This is a basic workflow to help you get started with Actions
+name: Azure Static Web Apps CI/CD
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    branches: [ main ]
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    name: Build and Deploy Job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
-      - name: Azure Static Web Apps Deploy
+        with:
+          submodules: true
+      - name: Build And Deploy
+        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          # Action to perform
-          action: deploy
-          # Directory location of the application source code
-          app_location: src/
-          # Required token
-          azure_static_web_apps_api_token: $API_TOKEN
-          # Custom command for Oryx to run when building Azure Functions source code
-#           api_build_command: # optional
-#           # Directory location of the Azure Functions source code
-#           api_location: # optional
-#           # Identical in use to output_location
-#           app_artifact_location: # optional
-#           # Directory location of the compiled application code after building
-#           output_location: # optional
-#           # Custom command for Oryx to run when building application source code
-#           app_build_command: # optional
-#           # Token for interacting with the Github repository. Currently used only for commenting on Pull Requests.
-#           repo_token: # optional
-#           # Directory location where the routes.json file can be found in the source code
-#           routes_location: # optional
-#           # Skips the build step for the application source code if set to true.
-#           skip_app_build: # optional
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          ###### Repository/Build Configurations ######
+          app_location: "src" # App source code path
+          api_location: "api" # Api source code path - optional
+          output_location: "public" # Built app content directory - optional
+          ###### End of Repository/Build Configurations ######
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: "close"
