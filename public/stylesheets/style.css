@@ -41,8 +41,8 @@
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
-  --bs-primary-rgb: 189, 93, 56;
-  --bs-secondary-rgb: 108, 117, 125;
+  --bs-primary-rgb: 49, 58, 188;
+  --bs-secondary-rgb: 108, 114, 193;
   --bs-success-rgb: 25, 135, 84;
   --bs-info-rgb: 13, 202, 240;
   --bs-warning-rgb: 255, 193, 7;
@@ -4812,13 +4812,13 @@ textarea.form-control-lg {
 }
 .page-link:hover {
   z-index: 2;
-  color: #974a2d;
+  color: #2d2f97;
   background-color: #e9ecef;
   border-color: #dee2e6;
 }
 .page-link:focus {
   z-index: 3;
-  color: #974a2d;
+  color: #2d5297;
   background-color: #e9ecef;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(189, 93, 56, 0.25);
@@ -4928,9 +4928,9 @@ textarea.form-control-lg {
 }
 
 .alert-primary {
-  color: #713822;
-  background-color: #f2dfd7;
-  border-color: #ebcec3;
+  color: #372271;
+  background-color: #dcd7f2;
+  border-color: #c3d0eb;
 }
 .alert-primary .alert-link {
   color: #5a2d1b;
